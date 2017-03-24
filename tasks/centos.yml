@@ -1,0 +1,20 @@
+---
+# tasks file for installing pacemaker on centos7
+
+- name: install pacemaker releated package
+  yum: name={{ item }} state=present
+  with_items:
+    - pacemaker
+    - pcs
+    - resource-agents
+
+- name: # change password of user 'hacluster' created by packages installed above
+  shell: echo {{ user_hacluster_password }} | passwd --stdin hacluster
+
+- name: start and enable pcsd
+  service: name=pcsd state=started enabled=yes
+
+- name: cluster and resource operations
+  include: cluster_resource_operation.yml
+  when: role is defined and role  == "operator"
+

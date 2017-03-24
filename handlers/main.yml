@@ -1,0 +1,5 @@
+---
+# handlers file for pacemaker
+
+- name: restart pcsd
+  service: name=pcsd state=restarted

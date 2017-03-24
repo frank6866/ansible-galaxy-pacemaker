@@ -1,0 +1,48 @@
+# [member]
+pacemaker_NAME={{ ansible_hostname }}
+pacemaker_DATA_DIR="{{ pacemaker_DATA_DIR }}"
+#pacemaker_WAL_DIR=""
+#pacemaker_SNAPSHOT_COUNT="10000"
+#pacemaker_HEARTBEAT_INTERVAL="100"
+#pacemaker_ELECTION_TIMEOUT="1000"
+pacemaker_LISTEN_PEER_URLS="http://{{ ansible_ssh_host }}:2380"
+pacemaker_LISTEN_CLIENT_URLS="http://{{ ansible_ssh_host }}:2379, http://{{ ansible_ssh_host }}:4001"
+#pacemaker_MAX_SNAPSHOTS="5"
+#pacemaker_MAX_WALS="5"
+#pacemaker_CORS=""
+#
+#[cluster]
+pacemaker_INITIAL_ADVERTISE_PEER_URLS="http://{{ ansible_ssh_host }}:2380"
+# if you use different pacemaker_NAME (e.g. test), set pacemaker_INITIAL_CLUSTER value for this name, i.e. "test=http://..."
+#pacemaker_INITIAL_CLUSTER="default=http://localhost:2380"
+pacemaker_INITIAL_CLUSTER="{% for host in groups['pacemaker'] %}{{hostvars[host]['ansible_hostname']}}=http://{{hostvars[host]['ansible_ssh_host']}}:2380,{% endfor %}"
+#pacemaker_INITIAL_CLUSTER_STATE="new"
+#pacemaker_INITIAL_CLUSTER_TOKEN="pacemaker-cluster"
+pacemaker_ADVERTISE_CLIENT_URLS="http://{{ ansible_ssh_host }}:2379, http://{{ ansible_ssh_host }}:4001"
+#pacemaker_DISCOVERY=""
+#pacemaker_DISCOVERY_SRV=""
+#pacemaker_DISCOVERY_FALLBACK="proxy"
+#pacemaker_DISCOVERY_PROXY=""
+#
+#[proxy]
+#pacemaker_PROXY="off"
+#pacemaker_PROXY_FAILURE_WAIT="5000"
+#pacemaker_PROXY_REFRESH_INTERVAL="30000"
+#pacemaker_PROXY_DIAL_TIMEOUT="1000"
+#pacemaker_PROXY_WRITE_TIMEOUT="5000"
+#pacemaker_PROXY_READ_TIMEOUT="0"
+#
+#[security]
+#pacemaker_CERT_FILE=""
+#pacemaker_KEY_FILE=""
+#pacemaker_CLIENT_CERT_AUTH="false"
+#pacemaker_TRUSTED_CA_FILE=""
+#pacemaker_PEER_CERT_FILE=""
+#pacemaker_PEER_KEY_FILE=""
+#pacemaker_PEER_CLIENT_CERT_AUTH="false"
+#pacemaker_PEER_TRUSTED_CA_FILE=""
+#
+#[logging]
+#pacemaker_DEBUG="false"
+# examples for -log-package-levels pacemakerserver=WARNING,security=DEBUG
+#pacemaker_LOG_PACKAGE_LEVELS=""

@@ -1,0 +1,19 @@
+---
+# defaults file for pacemaker
+
+add_ip_hostname_in_etc_hosts: false
+user_hacluster_password: Change@Me
+# cluster_name: default_cluster
+
+pcs_properties:
+  - key: "stonith-enabled"
+    value: "false"
+  - key: "no-quorum-policy"
+    value: "ignore"
+
+# vip_name: "ClusterIP"
+# vip_address: "10.10.10.10"
+# vip_cidr: "24"
+# vip_monitor_interval: "30"
+# vip_nic_name: "eth0" # the variable is optional
+

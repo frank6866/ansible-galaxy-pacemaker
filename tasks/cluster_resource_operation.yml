@@ -1,0 +1,39 @@
+---
+# tasks file for cluster and resource operations
+
+- name: pcs cluster auth
+  shell: pcs cluster auth {{ groups['pacemaker'] | join(' ') }}
+         -u hacluster -p {{ user_hacluster_password }} --force
+
+- name: setup cluster
+  shell: pcs cluster setup --force --name {{ cluster_name }} {{ groups['pacemaker'] | join(' ') }}
+  when: cluster_name is defined
+
+- name: start cluster
+  shell: pcs cluster start --all
+  when: cluster_name is defined
+
+- name: set properties
+  shell: pcs property set {{ item.key }}={{ item.value }}
+  with_items: "{{ pcs_properties | default([])}}"
+  when: pcs_properties is defined
+  when: cluster_name is defined
+
+- name: defaults migration-threshold=1
+  shell: pcs resource defaults migration-threshold=1
+  when: cluster_name is defined
+
+- name: create vip without nic
+  shell: pcs resource create {{ vip_name }} ocf:heartbeat:IPaddr2
+         ip={{ vip_address }} cidr_netmask={{ vip_cidr }}
+         op monitor interval={{ vip_monitor_interval }}
+  when: vip_name is defined and vip_nic_name is not defined
+
+- name: create vip with nic
+  shell: pcs resource create {{ vip_name }} ocf:heartbeat:IPaddr2
+         nic={{ vip_nic_name }} ip={{ vip_address }} cidr_netmask={{ vip_cidr }}
+         op monitor interval={{ vip_monitor_interval }}
+  when: vip_name is defined and vip_nic_name is defined
+
+
+
