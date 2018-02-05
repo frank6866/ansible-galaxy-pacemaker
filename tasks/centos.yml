@@ -8,7 +8,7 @@
     - pcs
     - resource-agents
 
-- name: # change password of user 'hacluster' created by packages installed above
+- name: change password of user 'hacluster' created by packages installed above
   shell: echo {{ user_hacluster_password }} | passwd --stdin hacluster
 
 - name: start and enable pcsd
